@@ -1,8 +1,23 @@
 import './style.css'
-import { AxesHelper, BoxBufferGeometry, Mesh, MeshNormalMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three' // Importing the Scene and WebGLRenderer classes from the three.js library
+import {
+  AxesHelper,
+  BoxBufferGeometry,
+  BufferGeometry,
+  Float32BufferAttribute,
+  MathUtils,
+  Mesh,
+  MeshNormalMaterial,
+  PerspectiveCamera,
+  Points,
+  PointsMaterial,
+  Scene,
+  WebGLRenderer } from 'three' // Importing the Scene and WebGLRenderer classes from the three.js library
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls' // Importing the OrbitControls class from the three.js library
 
 const scene = new Scene() // Création d'une nouvelle scène
+
+const count = 100 // nombre de points
+const distance = 2 // distance entre les points, les points sont placés entre -distance et distance
 
 scene.add(new AxesHelper()) // Ajout d'un repère à la scène
 
@@ -19,11 +34,25 @@ camera.position.x = 0.5 // Déplacement de la caméra sur l'axe x
 // camera.position.set(0.5, 0.5, 2) // Déplacement de la caméra sur les axes x, y et z
 scene.add(camera) // Ajout de la caméra à la scène
 
-const cube = new Mesh(
-  new BoxBufferGeometry(1, 1, 1), // Création d'un cube
-  new MeshNormalMaterial() // Création d'un material qui permet de colorer les faces du cube par rapport à leur position face à la caméra
-)
-scene.add(cube) // Ajout du cube à la scène
+
+const points = new Float32Array(count * 3) // Création d'un tableau de 300 valeurs
+// count * 3 car chaque point est représenté par 3 valeurs (x, y, z)
+for (let i = 0; i < count; i++) { // boucle qui parcourt le tableau
+  points[i] = MathUtils.randFloatSpread(distance * 2) // place un point entre -distance et distance
+  points[i + 1] = MathUtils.randFloatSpread(distance * 2) // place un point entre -distance et distance
+  points[i + 2] = MathUtils.randFloatSpread(distance * 2) // place un point entre -distance et distance
+}
+
+const geometry = new BufferGeometry() // Création d'une géométrie de cube
+geometry.setAttribute('position', new Float32BufferAttribute(points, 3)) // Ajout d'un attribut position à la géométrie
+const pointMaterial = new PointsMaterial({
+  color: 'red',
+  size: 0.1,
+}) // Création d'un matériau de points
+
+const pointsObject = new Points(geometry, pointMaterial) // Création d'un point avec la géométrie du cube et la couleur du matériau
+
+scene.add(pointsObject) // Ajout des points à la scène
 
 const renderer = new WebGLRenderer({
   antialias: true // permet d'activer l'anti-crénelage
