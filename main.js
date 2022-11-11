@@ -28,8 +28,9 @@ const scene = new Scene() // Création d'une nouvelle scène
 
 const count = 100 // nombre de points
 const distance = 2 // distance entre les points, les points sont placés entre -distance et distance
+const size = 0.1 // taille des points
 
-scene.add(new AxesHelper()) // Ajout d'un repère à la scène
+// scene.add(new AxesHelper()) // Ajout d'un repère à la scène
 
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000) // Création d'une nouvelle caméra
 // le 75 est l'angle de vue de la caméra
@@ -57,7 +58,7 @@ const geometry = new BufferGeometry() // Création d'une géométrie de cube
 geometry.setAttribute('position', new Float32BufferAttribute(points, 3)) // Ajout d'un attribut position à la géométrie
 geometry.setAttribute('color', new Float32BufferAttribute(colors, 3)) // Ajout d'un attribut couleur à la géométrie
 const pointMaterial = new PointsMaterial({
-  size: 0.1, // taille des points
+  size, // taille des points
   vertexColors: true, // permet d'utiliser les couleurs des points
   alphaTest: 0.01, // permet de cacher les points qui ont une transparence inférieure à 0.5
   alphaMap: alphaMap, // permet de définir une texture de transparence
